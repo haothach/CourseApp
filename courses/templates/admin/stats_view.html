@@ -1,0 +1,46 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+<h1>Thong ke khoa hoc truc tuyen</h1>
+<ul>
+    {% for c in stats_view %}
+    <li><strong>{{ c.name }}</strong>: {{ c.count }}</li>
+    {% endfor %}
+</ul>
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let labels = []
+    let values = []
+
+    {% for c in stats_view %}
+        values.push({{ c.count }})
+        labels.push('{{ c.name }}')
+    {% endfor %}
+
+    window.onload = () => {
+        const ctx = document.getElementById('myChart');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: '# So luong',
+            data: values,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+</script>
+{% endblock %}
